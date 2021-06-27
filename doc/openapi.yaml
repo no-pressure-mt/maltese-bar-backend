@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Maltese Bar API
+  description: 
+  version: 0.0.1
+
+paths:
+  /bars:
+    get:
+      summary: Get List of /bars
+      responses:
+        '200':
+          description: List of bars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/Bar"
+  /bars/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+    get:
+      summary: Get List of /bars
+      responses:
+        '200':
+          description: List of bars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/Bar"             
+
+
+components:
+  schemas:
+    Location:
+      properties:
+        address:
+          type: string
+        locality:
+          type: string
+        lat:
+          type: number
+        lon:
+          type: number
+    Bar:
+      properties:
+        id: 
+          type: string
+          description: id of bar as slug of name
+          example: kings-gate-bar
+        name:
+          type: string
+        phone: 
+          type: string
+        location:
+         $ref:  "#/components/schemas/Location"
+      required:
+        - id
+        - name
+        - location
+    Table:
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - fixed
+            - person
+            - other
+            - takeaway
+          description: >
+            * fixed - phisical table with number
+            * person - identified by person (like "ginger guy")
+            * other - any other situation
+        description:
+          type: string
+        icon: 
+          type: string
+          description: url to icon image
+    ProductCategory:
+      properties:
+        id:
+          type: string
+          description: id of bar as slug of name
+          example: craft-beer
+        name:
+          type: string
+          example: Craft Beer
+        icon: 
+          type: string
+          description: url to icon image
