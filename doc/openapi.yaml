@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Maltese Bar API
-  description: 
+  description: Maltese Bar API
   version: 0.0.1
 
 paths:
@@ -21,10 +21,11 @@ paths:
     parameters:
       - name: id
         in: path
+        required: true
         schema:
           type: string
     get:
-      summary: Get List of /bars
+      summary: Get bar info
       responses:
         '200':
           description: List of bars
@@ -34,7 +35,45 @@ paths:
                 type: array
                 items:
                   $ref:  "#/components/schemas/Bar"             
-
+  /bars/{id}/menu/categories:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of categries of all products in menu
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/ProductCategory"
+  /bars/{id}/menu/products:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: categry
+          in: query
+          required: 
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of products in menu
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/MenuItem"
 
 components:
   schemas:
@@ -97,3 +136,38 @@ components:
         icon: 
           type: string
           description: url to icon image
+    Product:
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        quatityType:
+          enum:
+            - PCS
+            - WEIGHT
+            - LENGTH
+        categries:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductCategory"
+        image:
+          type: string
+    MenuItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          enum:
+            - AVAILABLE
+            - OUT_OF_STOCK
+        product:
+          $ref:  "#/components/schemas/Product"
+        price:
+          type: number
+        image:
+          type: string        
